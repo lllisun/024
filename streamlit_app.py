@@ -2,17 +2,12 @@ import streamlit as st
 import pickle
 import pandas as pd
 
-# Load the trained model
 with open("rf_obesity.pkl", "rb") as f:
     model = pickle.load(f)
 
-# App title
 st.title("Obesity Level Prediction")
-
-# User inputs for prediction
 st.header("Enter Your Information")
 
-# Age (Integer)
 age = st.number_input("Age (years)", min_value=1, max_value=120, value=25)
 
 # Height in feet and inches (converted to meters for model)
@@ -24,21 +19,20 @@ height_meters = (height_feet * 12 + height_inches) * 0.0254  # Convert to meters
 weight_pounds = st.number_input("Weight (pounds)", min_value=20, max_value=500, value=150)
 weight_kg = weight_pounds * 0.453592  # Convert to kilograms
 
-# Other features
-fh = st.selectbox("Family History of Overweight (FH)", options=["yes", "no"])
-favc = st.selectbox("Frequent Consumption of High-Calorie Food (FAVC)", options=["yes", "no"])
-fcvc = st.slider("Frequency of Vegetable Consumption (1=Low, 3=High)", min_value=1, max_value=3, value=2)
-ncp = st.slider("Number of Meals per Day (NCP)", min_value=1, max_value=4, value=3)
-caec = st.selectbox("Consumption of Food Between Meals (CAEC)", options=["Always", "Frequently", "Sometimes", "Never"])
-smoke = st.selectbox("Do You Smoke? (SMOKE)", options=["yes", "no"])
-ch2o = st.slider("Daily Water Intake (liters, CH2O)", min_value=1.0, max_value=3.0, step=0.1)
-scc = st.selectbox("Do You Monitor Calories? (SCC)", options=["yes", "no"])
-faf = st.slider("Physical Activity Frequency (days/week, FAF)", min_value=0.0, max_value=7.0, step=0.1)
-tue = st.slider("Time Spent Using Technology (hours/day, TUE)", min_value=0.0, max_value=24.0, step=0.5)
-calc = st.selectbox("Consumption of Alcohol (CALC)", options=["no", "sometimes", "frequently"])
-mtrans = st.selectbox("Mode of Transportation (MTRANS)", options=["Walking", "Public_Transportation", "Automobile", "Bike", "Motorbike"])
 
-# Prepare the input data for prediction
+fh = st.selectbox("Family History of Overweight", options=["yes", "no"])
+favc = st.selectbox("Frequent Consumption of High-Calorie Food", options=["yes", "no"])
+fcvc = st.slider("Frequency of Vegetable Consumption (1=Low, 3=High)", min_value=1, max_value=3, value=2)
+ncp = st.slider("Number of Meals per Day", min_value=1, max_value=4, value=3)
+caec = st.selectbox("Consumption of Food Between Meals", options=["Always", "Frequently", "Sometimes", "Never"])
+smoke = st.selectbox("Do You Smoke?", options=["yes", "no"])
+ch2o = st.slider("Daily Water Intake (liters)", min_value=1.0, max_value=3.0, step=0.1)
+scc = st.selectbox("Do You Monitor Calories?", options=["yes", "no"])
+faf = st.slider("Physical Activity Frequency (days/week)", min_value=0.0, max_value=7.0, step=0.1)
+tue = st.slider("Time Spent Using Technology (hours/day)", min_value=0.0, max_value=24.0, step=0.5)
+calc = st.selectbox("Consumption of Alcohol", options=["no", "sometimes", "frequently"])
+mtrans = st.selectbox("Mode of Transportation", options=["Walking", "Public_Transportation", "Automobile", "Bike", "Motorbike"])
+
 input_data = pd.DataFrame({
     "Age": [age],
     "Height": [height_meters],
@@ -65,8 +59,7 @@ input_data = pd.DataFrame({
     "MTRANS_Motorbike": [1 if mtrans == "Motorbike" else 0],
 })
 
-# Align input data to the model's training columns
-for col in model.feature_names_in_:  # Adjust this line if the model uses `X.columns` or similar
+for col in model.feature_names_in_:  
     if col not in input_data.columns:
         input_data[col] = 0
 
