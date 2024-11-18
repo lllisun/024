@@ -74,15 +74,10 @@ class_labels = [
 ]
 
 if st.button("Predict"):
-    # Reorder columns to match the training set
-    input_data = input_data[model.feature_names_in_]
-    
-    # Make prediction
+
     prediction = model.predict(input_data)
-    
-    # Find the predicted class
-    predicted_class_index = prediction[0].argmax()  # Index of the highest value
+
+    predicted_class_index = prediction[0].argmax()  
     predicted_class_label = class_labels[predicted_class_index]
-    
-    # Display the result
+  
     st.write(f"Predicted Obesity Level: {predicted_class_label}")
